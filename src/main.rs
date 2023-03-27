@@ -37,7 +37,7 @@ fn main() {
     let args = Args::parse();
 
     if args.sort {
-        sort_files(args.verbose, args.log); // idk why but if i put error handling here it crashes the application. I need to fix it  
+        sort_files(args.verbose, args.log); // idk why but if i put error handling here it crashes the application. I need to fix it
         let end = SystemTime::now();
         let duration = end.duration_since(start).unwrap();
         println!("Time taken: {:?}", duration);
