@@ -1,4 +1,5 @@
-mod lib;
+#![allow(dead_code)]
+#![allow(unused_must_use)]
 
 use clap::Parser;
 use std::time::SystemTime;
@@ -36,7 +37,7 @@ fn main() {
     let args = Args::parse();
 
     if args.sort {
-        sort_files(args.verbose, args.log);
+        sort_files(args.verbose, args.log); // idk why but if i put error handling here it crashes the application. I need to fix it  
         let end = SystemTime::now();
         let duration = end.duration_since(start).unwrap();
         println!("Time taken: {:?}", duration);

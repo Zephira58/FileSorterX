@@ -94,7 +94,7 @@ pub fn match_extension(path: PathBuf) -> &'static str {
         Some(ext) if ext == "enc" => "sorted/encryption",
         _ => "sorted/other",
     };
-    return directory;
+    directory
 }
 
 pub fn write_logfile(file_name: &OsStr, moveto_directory: &Path) -> bool {
@@ -114,7 +114,7 @@ pub fn write_logfile(file_name: &OsStr, moveto_directory: &Path) -> bool {
         .write_all(format!("{:?}\n", moveto_directory.display()).as_bytes())
         .expect("write failed");
 
-    return true;
+    true
 }
 
 pub fn sort_files(verbose: bool, log: bool) -> std::io::Result<()> {
