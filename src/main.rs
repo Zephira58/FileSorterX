@@ -83,28 +83,4 @@ fn main() {
         }
         None => todo!(),
     }
-
-    /*
-    println!("{}", args.update);
-    if args.update {
-        update_filesorterx().expect("Failed to update FileSorterX");
-    } else
-
-
-    if args.sort {
-        sort_files(args.verbose, args.log); // idk why but if i put error handling here it crashes the application. I need to fix it
-        let end = SystemTime::now();
-        let duration = end.duration_since(start).unwrap();
-        println!("Time taken: {:?}", duration);
-    } else if args.create {
-        create_files(args.amount + 1);
-        let end = SystemTime::now();
-        let duration = end.duration_since(start).unwrap();
-        println!("Time taken: {:?}", duration);
-    //} else if args.xsorter {
-    //    custom_sort(&args.input, &args.output, &args.extension);
-    } else if !args.sort && !args.create && !args.update {
-        println!("No arguments given. Use 'FileSorterX --help' for more information");
-    }
-    */
 }
