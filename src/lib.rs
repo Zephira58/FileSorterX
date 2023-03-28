@@ -1,13 +1,53 @@
-use std::ffi::OsStr;
-use std::path::{Path, PathBuf};
-use std::{fs, io::Write};
+use self_update::cargo_crate_version;
+use std::{
+    ffi::OsStr,
+    fs,
+    io::Write,
+    path::{Path, PathBuf},
+};
 
-pub fn create_files() {
+pub fn create_files(amount: u32) {
     let extention_array = [
-        "jpg", "mp4", "wma", "gif", "zip", "txt", "torrent", "iso", "ttf", "dll", "exe", "",
+        "jpg", "mp4", "wma", "gif", "zip", "txt", "torrent", "iso", "ttf", "dll", "exe",
     ];
-    for x in 0..10001 {
-        fs::File::create(format!("{}.{}", x, extention_array[x % 11])).unwrap();
+
+    for file in 1..amount {
+        let mut file_name = String::new();
+        file_name.push_str(&file.to_string());
+        file_name.push('.');
+        file_name.push_str(extention_array[rand::random::<usize>() % 11]);
+        let mut file = fs::File::create(file_name).expect("Failed to create file");
+        file.write_all(b"Hello, world!")
+            .expect("Failed to write to file");
+    }
+}
+
+pub fn custom_sort(input_directory: &str, output_directory: &str, extention: &str) {
+    // Set up the directories
+    let input_directory = Path::new(input_directory);
+    let output_directory = Path::new(output_directory);
+
+    // Get all the files in the input directory
+    let files = fs::read_dir(input_directory).unwrap();
+
+    // Loop through each file and move it to the appropriate output directory
+    for file in files {
+        let file = file.unwrap().path();
+        println!("File: {:?}", file);
+
+        let _file_name = match file.file_name() {
+            Some(file_name) => file_name,
+            None => continue,
+        };
+
+        match file.extension() {
+            Some(ext) if ext == extention => {
+                fs::create_dir_all(output_directory).unwrap();
+                let output_file = output_directory.join(file.file_name().unwrap());
+                fs::rename(file, output_file).unwrap();
+            }
+            _ => continue,
+        }
     }
 }
 
@@ -143,4 +183,19 @@ pub fn sort_files(verbose: bool, log: bool) -> std::io::Result<()> {
             }
         }
     }
+}
+
+pub fn update_filesorterx() -> Result<(), Box<dyn (::std::error::Error)>> {
+    println!("Updating FileSorterX to the latest version...");
+
+    let status = self_update::backends::github::Update::configure()
+        .repo_owner("xanthus58")
+        .repo_name("FileSorterX")
+        .bin_name("github")
+        .show_download_progress(true)
+        .current_version(cargo_crate_version!())
+        .build()?
+        .update()?;
+    println!("Update status: `{}`!", status.version());
+    Ok(())
 }
