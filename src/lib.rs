@@ -33,8 +33,6 @@ pub fn custom_sort(input_directory: &str, output_directory: &str, extention: &st
     // Loop through each file and move it to the appropriate output directory
     for file in files {
         let file = file.unwrap().path();
-        println!("File: {:?}", file);
-
         let _file_name = match file.file_name() {
             Some(file_name) => file_name,
             None => continue,
@@ -157,7 +155,7 @@ pub fn write_logfile(file_name: &OsStr, moveto_directory: &Path) -> bool {
     true
 }
 
-pub fn sort_files(verbose: bool, log: bool) -> std::io::Result<()> {
+pub fn sort_files(verbose: &bool, log: &bool) -> std::io::Result<()> {
     loop {
         let entries = fs::read_dir("./").unwrap();
 
@@ -172,11 +170,11 @@ pub fn sort_files(verbose: bool, log: bool) -> std::io::Result<()> {
             fs::create_dir_all(moveto_directory).unwrap();
             fs::rename(&path, moveto_directory.join(file_name))?;
 
-            if verbose {
+            if *verbose {
                 println!("{:?} moved to {:?}", file_name, moveto_directory.display());
             }
 
-            if log {
+            if *log {
                 let log_dir = "sorter-logs";
                 fs::create_dir_all(log_dir).unwrap();
                 write_logfile(file_name, moveto_directory);

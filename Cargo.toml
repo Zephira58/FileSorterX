@@ -23,5 +23,5 @@ codegen-units = 1
 
 #Cross targets | Command: cross build --release --target <target>
 #x86_64-unknown-linux-gnu
-#x86_64-pc-windows-gnu
+#x86_64-pc-windows-msvc
 #x86_64-unknown-freebsd

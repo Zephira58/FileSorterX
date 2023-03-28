@@ -6,7 +6,7 @@ FileSorterX is a small command line application that automatically sorts files b
 ## How to Use
 To use FileSorterX, simply download the binary executable file for your operating system or run the command `cargo install FileSorterX` and run it from the command line in the location you want to sort. The application will scan the current directory for any files and automatically sort them based on their file extension. Or create over 10,000 random files with 0 data to test with. For example, if you have a file called document.pdf in the current directory, FileSorterX will create a folder called Documents and move the file into that folder.
 
-Both rust developers and cli users can specify custom file sorting! Just simple input the directory to read from; the directory you want your files matching the extention to go. And the file extention itself. An example command would be `FileSorterX --xsorter --input ~\Downloads --output ~\Downloads\test --extension txt`
+Both rust developers and cli users can specify custom file sorting! Just simple input the directory to read from; the directory you want your files matching the extension to go. And the file extension itself. An example command would be `FileSorterX customsort --input ~\Downloads --output ~\Downloads\test --extension txt`
 
 ### System Requirements
 FileSorterX is supported on all operating systems. You'll need to have Rust installed on your system in order to compile the source code and generate the binary executable. Or install it via cargo
