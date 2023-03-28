@@ -14,8 +14,8 @@ pub fn create_files(amount: u32) {
     for file in 1..amount {
         let mut file_name = String::new();
         file_name.push_str(&file.to_string());
-        file_name.push_str(".");
-        file_name.push_str(&extention_array[rand::random::<usize>() % 11]);
+        file_name.push('.');
+        file_name.push_str(extention_array[rand::random::<usize>() % 11]);
         let mut file = fs::File::create(file_name).expect("Failed to create file");
         file.write_all(b"Hello, world!")
             .expect("Failed to write to file");
@@ -35,7 +35,7 @@ pub fn custom_sort(input_directory: &str, output_directory: &str, extention: &st
         let file = file.unwrap().path();
         println!("File: {:?}", file);
 
-        let file_name = match file.file_name() {
+        let _file_name = match file.file_name() {
             Some(file_name) => file_name,
             None => continue,
         };

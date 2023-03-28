@@ -74,7 +74,7 @@ fn main() {
         let end = SystemTime::now();
         let duration = end.duration_since(start).unwrap();
         println!("Time taken: {:?}", duration);
-    } else if args.update == true {
+    } else if args.update {
         update_filesorterx().expect("Failed to update FileSorterX");
     } else if args.xsorter {
         custom_sort(&args.input, &args.output, &args.extension);

@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod tests {
-    use self_update::update::{self, UpdateStatus};
+    
     use std::{
         fs::File,
         path::{Path, PathBuf},
