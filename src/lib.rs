@@ -22,6 +22,35 @@ pub fn create_files(amount: u32) {
     }
 }
 
+pub fn custom_sort(input_directory: &str, output_directory: &str, extention: &str) {
+    // Set up the directories
+    let input_directory = Path::new(input_directory);
+    let output_directory = Path::new(output_directory);
+
+    // Get all the files in the input directory
+    let files = fs::read_dir(input_directory).unwrap();
+
+    // Loop through each file and move it to the appropriate output directory
+    for file in files {
+        let file = file.unwrap().path();
+        println!("File: {:?}", file);
+
+        let file_name = match file.file_name() {
+            Some(file_name) => file_name,
+            None => continue,
+        };
+
+        match file.extension() {
+            Some(ext) if ext == extention => {
+                fs::create_dir_all(output_directory).unwrap();
+                let output_file = output_directory.join(file.file_name().unwrap());
+                fs::rename(file, output_file).unwrap();
+            }
+            _ => continue,
+        }
+    }
+}
+
 pub fn match_extension(path: PathBuf) -> &'static str {
     let directory = match path.extension() {
         // Pictures
