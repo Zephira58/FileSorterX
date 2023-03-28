@@ -2,6 +2,8 @@ use std::ffi::OsStr;
 use std::path::{Path, PathBuf};
 use std::{fs, io::Write};
 
+use self_update::cargo_crate_version;
+
 pub fn create_files() {
     let extention_array = [
         "jpg", "mp4", "wma", "gif", "zip", "txt", "torrent", "iso", "ttf", "dll", "exe", "",
@@ -143,4 +145,19 @@ pub fn sort_files(verbose: bool, log: bool) -> std::io::Result<()> {
             }
         }
     }
+}
+
+pub fn update_filesorterx() -> Result<(), Box<dyn (::std::error::Error)>> {
+    println!("Updating FileSorterX to the latest version...");
+
+    let status = self_update::backends::github::Update::configure()
+        .repo_owner("xanthus58")
+        .repo_name("FileSorterX")
+        .bin_name("github")
+        .show_download_progress(true)
+        .current_version(cargo_crate_version!())
+        .build()?
+        .update()?;
+    println!("Update status: `{}`!", status.version());
+    Ok(())
 }

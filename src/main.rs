@@ -3,7 +3,7 @@
 
 use clap::Parser;
 use std::time::SystemTime;
-use FileSorterX::{create_files, sort_files};
+use FileSorterX::{create_files, sort_files, update_filesorterx};
 
 /*
 Made by Xanthus
@@ -30,11 +30,17 @@ struct Args {
     /// Generates a log file
     #[arg(short, long, default_value_t = false)]
     log: bool,
+
+    /// Preforms a self update
+    #[arg(short, long, default_value_t = false)]
+    update: bool,
 }
 
 fn main() {
     let start = SystemTime::now();
     let args = Args::parse();
+
+    println!("{}", args.update);
 
     if args.sort {
         sort_files(args.verbose, args.log); // idk why but if i put error handling here it crashes the application. I need to fix it
@@ -46,7 +52,9 @@ fn main() {
         let end = SystemTime::now();
         let duration = end.duration_since(start).unwrap();
         println!("Time taken: {:?}", duration);
-    } else if !args.sort && !args.create {
+    } else if !args.sort && !args.create && !args.update {
         println!("No arguments given. Use 'FileSorterX --help' for more information");
+    } else if args.update == true {
+        update_filesorterx().expect("Failed to update FileSorterX");
     }
 }
