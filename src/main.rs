@@ -5,6 +5,8 @@ use clap::Parser;
 use std::time::SystemTime;
 use FileSorterX::{create_files, sort_files, update_filesorterx};
 
+mod tests;
+
 /*
 Made by Xanthus
 Check out my other works at https://github.com/Xanthus58

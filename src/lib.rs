@@ -1,8 +1,10 @@
-use std::ffi::OsStr;
-use std::path::{Path, PathBuf};
-use std::{fs, io::Write};
-
 use self_update::cargo_crate_version;
+use std::{
+    ffi::OsStr,
+    fs,
+    io::Write,
+    path::{Path, PathBuf},
+};
 
 pub fn create_files(amount: u32) {
     let extention_array = [
