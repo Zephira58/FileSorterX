@@ -34,13 +34,15 @@ struct Args {
     /// Preforms a self update
     #[arg(short, long, default_value_t = false)]
     update: bool,
+
+    /// The amount of files to create
+    #[arg(short, long, default_value_t = 10000)]
+    amount: u32,
 }
 
 fn main() {
     let start = SystemTime::now();
     let args = Args::parse();
-
-    println!("{}", args.update);
 
     if args.sort {
         sort_files(args.verbose, args.log); // idk why but if i put error handling here it crashes the application. I need to fix it
@@ -48,13 +50,13 @@ fn main() {
         let duration = end.duration_since(start).unwrap();
         println!("Time taken: {:?}", duration);
     } else if args.create {
-        create_files();
+        create_files(args.amount + 1);
         let end = SystemTime::now();
         let duration = end.duration_since(start).unwrap();
         println!("Time taken: {:?}", duration);
-    } else if !args.sort && !args.create && !args.update {
-        println!("No arguments given. Use 'FileSorterX --help' for more information");
     } else if args.update == true {
         update_filesorterx().expect("Failed to update FileSorterX");
+    } else if !args.sort && !args.create && !args.update {
+        println!("No arguments given. Use 'FileSorterX --help' for more information");
     }
 }

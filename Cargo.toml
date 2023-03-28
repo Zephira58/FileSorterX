@@ -13,6 +13,7 @@ categories = ["command-line-utilities"]
 [dependencies]
 clap = { version = "4.1.13", features = ["derive"] }
 self_update = "0.36.0"
+rand = "0.8.5"
 
 [profile.release]
 strip = true

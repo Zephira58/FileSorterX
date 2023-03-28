@@ -4,12 +4,19 @@ use std::{fs, io::Write};
 
 use self_update::cargo_crate_version;
 
-pub fn create_files() {
+pub fn create_files(amount: u32) {
     let extention_array = [
-        "jpg", "mp4", "wma", "gif", "zip", "txt", "torrent", "iso", "ttf", "dll", "exe", "",
+        "jpg", "mp4", "wma", "gif", "zip", "txt", "torrent", "iso", "ttf", "dll", "exe",
     ];
-    for x in 0..10001 {
-        fs::File::create(format!("{}.{}", x, extention_array[x % 11])).unwrap();
+
+    for file in 1..amount {
+        let mut file_name = String::new();
+        file_name.push_str(&file.to_string());
+        file_name.push_str(".");
+        file_name.push_str(&extention_array[rand::random::<usize>() % 11]);
+        let mut file = fs::File::create(file_name).expect("Failed to create file");
+        file.write_all(b"Hello, world!")
+            .expect("Failed to write to file");
     }
 }
 
