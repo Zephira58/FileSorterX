@@ -3,8 +3,7 @@
 
 use clap::{Parser, Subcommand};
 use file_sorter_x::{create_files, custom_sort, sort_files, update_filesorterx};
-use std::path::PathBuf;
-use std::time::SystemTime;
+use std::{path::PathBuf, time::SystemTime};
 
 /*
 Made by Xanthus
@@ -110,6 +109,6 @@ fn main() {
         Some(Commands::Update { .. }) => {
             update_filesorterx().expect("Failed to update FileSorterX");
         }
-        None => todo!(),
+        None => println!("No command provided. Use 'filesorterx --help' for more information."),
     }
 }

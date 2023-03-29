@@ -4,8 +4,8 @@ mod tests;
 mod config;
 
 use self_update::cargo_crate_version;
-use std::collections::HashMap;
 use std::{
+    collections::HashMap,
     ffi::OsStr,
     fs,
     io::Write,
