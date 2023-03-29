@@ -3,15 +3,6 @@
 version = 3
 
 [[package]]
-name = "FileSorterX"
-version = "1.1.0"
-dependencies = [
- "clap",
- "rand",
- "self_update",
-]
-
-[[package]]
 name = "aho-corasick"
 version = "0.7.20"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -176,6 +167,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e51093e27b0797c359783294ca4f0a911c270184cb10f85783b118614a1501be"
 dependencies = [
  "instant",
+]
+
+[[package]]
+name = "file_sorter_x"
+version = "1.1.0"
+dependencies = [
+ "clap",
+ "rand",
+ "self_update",
 ]
 
 [[package]]

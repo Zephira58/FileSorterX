@@ -2,10 +2,8 @@
 #![allow(unused_must_use)]
 
 use clap::{Parser, Subcommand};
-use std::time::SystemTime;
-use FileSorterX::{create_files, custom_sort, sort_files, update_filesorterx};
-
-mod tests;
+use file_sorter_x::{create_files, custom_sort, sort_files, update_filesorterx};
+use std::{path::PathBuf, time::SystemTime};
 
 /*
 Made by Xanthus
@@ -25,6 +23,22 @@ struct Cli {
 #[derive(Subcommand)]
 enum Commands {
     Sort {
+        /// The input directory
+        #[arg(short, long)]
+        input: String,
+
+        /// The output directory
+        #[arg(short, long)]
+        output: String,
+
+        /// Number of directory levels (1-3)
+        #[arg(short, long, default_value_t = 2)]
+        nesting_level: u8,
+
+        /// Use alternative sorting directory name
+        #[arg(short, long, default_value_t = false)]
+        use_alt: bool,
+
         /// Verbose mode
         #[arg(short, long, default_value_t = false)]
         verbose: bool,
@@ -59,8 +73,22 @@ fn main() {
     let cli = Cli::parse();
 
     match &cli.command {
-        Some(Commands::Sort { verbose, log }) => {
-            sort_files(verbose, log);
+        Some(Commands::Sort {
+            input,
+            output,
+            nesting_level,
+            use_alt,
+            verbose,
+            log,
+        }) => {
+            let in_dir = PathBuf::from(input);
+            let out_dir = PathBuf::from(output);
+
+            if !in_dir.is_dir() {
+                panic!("Provided path is not a directory: '{:?}'", in_dir)
+            }
+
+            sort_files(in_dir, out_dir, *nesting_level, *use_alt, *verbose, *log);
             let end = SystemTime::now();
             let duration = end.duration_since(start).unwrap();
             println!("Time taken: {:?}", duration);
@@ -81,6 +109,6 @@ fn main() {
         Some(Commands::Update { .. }) => {
             update_filesorterx().expect("Failed to update FileSorterX");
         }
-        None => todo!(),
+        None => println!("No command provided. Use 'filesorterx --help' for more information."),
     }
 }
