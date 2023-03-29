@@ -3,7 +3,7 @@
 
 use clap::{Parser, Subcommand};
 use std::time::SystemTime;
-use FileSorterX::{create_files, custom_sort, sort_files, update_filesorterx};
+use file_sorter_x::{create_files, custom_sort, sort_files, update_filesorterx};
 
 mod tests;
 

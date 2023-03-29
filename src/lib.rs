@@ -136,7 +136,7 @@ pub fn match_extension(path: PathBuf) -> &'static str {
 }
 
 pub fn write_logfile(file_name: &OsStr, moveto_directory: &Path) -> bool {
-    let mut logfile = std::fs::OpenOptions::new()
+    let mut logfile = fs::OpenOptions::new()
         .append(true)
         .create(true)
         .open("sorter-logs/logs.txt")
@@ -183,7 +183,7 @@ pub fn sort_files(verbose: &bool, log: &bool) -> std::io::Result<()> {
     }
 }
 
-pub fn update_filesorterx() -> Result<(), Box<dyn (::std::error::Error)>> {
+pub fn update_filesorterx() -> Result<(), Box<dyn (std::error::Error)>> {
     println!("Updating FileSorterX to the latest version...");
 
     let status = self_update::backends::github::Update::configure()
