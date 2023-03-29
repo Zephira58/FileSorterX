@@ -1,5 +1,5 @@
 [package]
-name = "file_sorter_x"
+name = "FileSorterX"
 version = "1.1.0"
 edition = "2021"
 authors = ["Xanthus58 <Xanthus58@protonmail.com>"]
