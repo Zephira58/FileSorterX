@@ -11,7 +11,7 @@ keywords = ["file", "sort", "automatic", "extension"]
 categories = ["command-line-utilities"]
 
 [dependencies]
-clap = { version = "4.1.13", features = ["derive"] }
+clap = { version = "4.2.0", features = ["derive"] }
 self_update = "0.36.0"
 rand = "0.8.5"
 
