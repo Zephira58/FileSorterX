@@ -7,7 +7,7 @@ use std::{
 };
 
 pub fn create_files(amount: u32) {
-    let extention_array = [
+    let extension_array = [
         "jpg", "mp4", "wma", "gif", "zip", "txt", "torrent", "iso", "ttf", "dll", "exe",
     ];
 
@@ -15,14 +15,14 @@ pub fn create_files(amount: u32) {
         let mut file_name = String::new();
         file_name.push_str(&file.to_string());
         file_name.push('.');
-        file_name.push_str(extention_array[rand::random::<usize>() % 11]);
+        file_name.push_str(extension_array[rand::random::<usize>() % 11]);
         let mut file = fs::File::create(file_name).expect("Failed to create file");
         file.write_all(b"Hello, world!")
             .expect("Failed to write to file");
     }
 }
 
-pub fn custom_sort(input_directory: &str, output_directory: &str, extention: &str) {
+pub fn custom_sort(input_directory: &str, output_directory: &str, extension: &str) {
     // Set up the directories
     let input_directory = Path::new(input_directory);
     let output_directory = Path::new(output_directory);
@@ -39,7 +39,7 @@ pub fn custom_sort(input_directory: &str, output_directory: &str, extention: &st
         };
 
         match file.extension() {
-            Some(ext) if ext == extention => {
+            Some(ext) if ext == extension => {
                 fs::create_dir_all(output_directory).unwrap();
                 let output_file = output_directory.join(file.file_name().unwrap());
                 fs::rename(file, output_file).unwrap();
@@ -80,7 +80,7 @@ pub fn match_extension(path: PathBuf) -> &'static str {
         Some(ext) if ext == "7z" => "sorted/files",
         Some(ext) if ext == "gz" => "sorted/files",
         Some(ext) if ext == "cfg" => "sorted/files",
-        // Doccuments
+        // Documents
         Some(ext) if ext == "txt" => "sorted/documents",
         Some(ext) if ext == "pdf" => "sorted/documents",
         Some(ext) if ext == "doc" => "sorted/documents",
@@ -107,7 +107,7 @@ pub fn match_extension(path: PathBuf) -> &'static str {
         Some(ext) if ext == "rs" => "sorted/programming/rust",
         Some(ext) if ext == "js" => "sorted/programming/javaScript",
         Some(ext) if ext == "jar" => "sorted/programming/java",
-        Some(ext) if ext == "html" => "sorted/programming/hml",
+        Some(ext) if ext == "html" => "sorted/programming/html",
         Some(ext) if ext == "c" => "sorted/programming/c",
         Some(ext) if ext == "cpp" => "sorted/programming/c++",
         Some(ext) if ext == "cs" => "sorted/programming/c#",
@@ -123,10 +123,10 @@ pub fn match_extension(path: PathBuf) -> &'static str {
         Some(ext) if ext == "apk" => "sorted/applications",
         Some(ext) if ext == "exe" => "sorted/applications",
         Some(ext) if ext == "appimage" => "sorted/applications",
-        //Games
+        // Games
         Some(ext) if ext == "osz" => "sorted/game-stuff/osu",
         Some(ext) if ext == "osk" => "sorted/game-stuff/osu",
-        //Encyption
+        // Encryption
         Some(ext) if ext == "gpg" => "sorted/encryption",
         Some(ext) if ext == "pcv" => "sorted/encryption",
         Some(ext) if ext == "enc" => "sorted/encryption",
