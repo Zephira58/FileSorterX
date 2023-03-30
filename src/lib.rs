@@ -211,11 +211,9 @@ pub fn update_filesorterx() -> Result<(), Box<dyn (std::error::Error)>> {
 
 pub fn benchmark() -> Duration {
     let files = fs::read_dir(".");
-    if files.is_ok() {
-        if files.unwrap().count() > 0 {
-            println!("Please run benchmark in an empty directory.");
-            return Duration::from_secs(0);
-        }
+    if files.is_ok() && files.unwrap().count() > 0 {
+        println!("Please run benchmark in an empty directory.");
+        return Duration::from_secs(0);
     }
 
     let startbench = SystemTime::now();
@@ -224,5 +222,5 @@ pub fn benchmark() -> Duration {
         .expect("Failed to sort files");
     let endbench = SystemTime::now();
     std::fs::remove_dir_all("./benchmark").expect("Failed to remove benchmark directory");
-    return endbench.duration_since(startbench).unwrap();
+    endbench.duration_since(startbench).unwrap()
 }
