@@ -5,12 +5,11 @@ use std::path::PathBuf;
 #[rustfmt::skip]
 fn test_match_extension() {
     assert_eq!(get_subdir_by_extension("jpg", 1, false), PathBuf::from("image"));
-    assert_eq!(get_subdir_by_extension("jpg", 2, false), PathBuf::from("image/gif"));
-    assert_eq!(get_subdir_by_extension("jpg", 3, false), PathBuf::from("image/gif"));
+    assert_eq!(get_subdir_by_extension("jpg", 2, false), PathBuf::from("image/jpg"));
 
-    assert_eq!(get_subdir_by_extension("jpg", 1, true), PathBuf::from("image"));
-    assert_eq!(get_subdir_by_extension("jpg", 2, true), PathBuf::from("image/animated"));
-    assert_eq!(get_subdir_by_extension("jpg", 3, true), PathBuf::from("image/animated/gif"));
+    assert_eq!(get_subdir_by_extension("gif", 1, true), PathBuf::from("image"));
+    assert_eq!(get_subdir_by_extension("gif", 2, true), PathBuf::from("image/animated"));
+    assert_eq!(get_subdir_by_extension("gif", 3, true), PathBuf::from("image/animated/gif"));
 
     assert_eq!(get_subdir_by_extension("qt", 1, false), PathBuf::from("video"));
     assert_eq!(get_subdir_by_extension("qt", 2, false), PathBuf::from("video/quicktime"));
