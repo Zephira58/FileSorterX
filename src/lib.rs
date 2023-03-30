@@ -215,5 +215,6 @@ pub fn benchmark() -> Duration {
     sort_files(".".into(), "./benchmark".into(), 3, false, false, false)
         .expect("Failed to sort files");
     let endbench = SystemTime::now();
+    std::fs::remove_dir_all("./benchmark");
     return endbench.duration_since(startbench).unwrap();
 }
