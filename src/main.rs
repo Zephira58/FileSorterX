@@ -25,11 +25,11 @@ enum Commands {
     Sort {
         /// The input directory
         #[arg(short, long)]
-        input: String,
+        inputdir: String,
 
         /// The output directory
         #[arg(short, long)]
-        output: String,
+        outputdir: String,
 
         /// Number of directory levels (1-3)
         #[arg(short, long, default_value_t = 2)]
@@ -55,11 +55,11 @@ enum Commands {
     Customsort {
         /// The input directory
         #[arg(short, long)]
-        input: String,
+        inputdir: String,
 
         /// The output directory
         #[arg(short, long)]
-        output: String,
+        outputdir: String,
 
         /// The file extension to sort
         #[arg(short, long)]
@@ -74,15 +74,15 @@ fn main() {
 
     match &cli.command {
         Some(Commands::Sort {
-            input,
-            output,
+            inputdir,
+            outputdir,
             nesting_level,
             use_alt,
             verbose,
             log,
         }) => {
-            let in_dir = PathBuf::from(input);
-            let out_dir = PathBuf::from(output);
+            let in_dir = PathBuf::from(inputdir);
+            let out_dir = PathBuf::from(outputdir);
 
             if !in_dir.is_dir() {
                 panic!("Provided path is not a directory: '{:?}'", in_dir)
@@ -94,11 +94,11 @@ fn main() {
             println!("Time taken: {:?}", duration);
         }
         Some(Commands::Customsort {
-            input,
-            output,
+            inputdir,
+            outputdir,
             extension,
         }) => {
-            custom_sort(input, output, extension);
+            custom_sort(inputdir, outputdir, extension);
         }
         Some(Commands::Create { amount }) => {
             create_files(amount + 1);
