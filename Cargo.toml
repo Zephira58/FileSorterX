@@ -16,10 +16,12 @@ self_update = "0.36.0"
 rand = "0.8.5"
 
 [profile.release]
-strip = true
-opt-level = "s"
+opt-level = 3
+debug = false
+panic = "abort"
+codegen-units = 16
 lto = true
-codegen-units = 1
+incremental = false
 
 #Cross targets | Command: cross build --release --target <target>
 #x86_64-unknown-linux-gnu

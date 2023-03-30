@@ -21,9 +21,7 @@ pub fn create_files(amount: u32) {
         let mut rng = rand::thread_rng();
         let random_extension = EXTENSIONS[rng.gen_range(0..EXTENSIONS.len())].0;
         file_name.push_str(random_extension);
-        let mut file = fs::File::create(file_name).expect("Failed to create file");
-        file.write_all(b"Hello, world!")
-            .expect("Failed to write to file");
+        let _file = fs::File::create(file_name).expect("Failed to create file");
     }
 }
 
@@ -64,7 +62,7 @@ pub fn custom_sort(
 
         if log {
             write_logfile(
-                &file.as_os_str(),
+                file.as_os_str(),
                 output_directory,
                 input_directory.to_str().unwrap(),
             );
@@ -91,7 +89,7 @@ pub fn custom_sort(
 /// 3, true => "image/animated/gif", "video/quicktime", "video/mp4"
 /// ```
 pub fn get_subdir_by_extension(ext: &str, nesting_level: u8, use_alt: bool) -> PathBuf {
-    if !(nesting_level >= 1 && nesting_level <= 3) {
+    if !(1..=3).contains(&nesting_level) {
         panic!("Nesting level is out of range.");
     }
 

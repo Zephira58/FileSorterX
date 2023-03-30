@@ -78,7 +78,7 @@ enum Commands {
     },
     /// Updates FileSorterX to the latest version based on the github repo
     Update {},
-    /// Benchmarks the time it takes to create 10k files and sort them
+    /// Benchmarks the time it takes to create 10k files and sort them in the current directory
     Benchmark {},
 }
 
@@ -134,7 +134,6 @@ fn main() {
                 "Time taken: {:?}",
                 endbench.duration_since(startbench).unwrap()
             );
-            std::fs::remove_dir_all("./benchmark");
         }
         None => println!("No command provided. Use 'filesorterx --help' for more information."),
     }
