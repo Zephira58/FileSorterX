@@ -1,8 +1,9 @@
+mod config;
 #[cfg(test)]
 mod tests;
 
-mod config;
-
+use config::EXTENSIONS;
+use rand::Rng;
 use self_update::cargo_crate_version;
 use std::{
     collections::HashMap,
@@ -13,15 +14,13 @@ use std::{
 };
 
 pub fn create_files(amount: u32) {
-    let extension_array = [
-        "jpg", "mp4", "wma", "gif", "zip", "txt", "torrent", "iso", "ttf", "dll", "exe",
-    ];
-
     for file in 1..amount {
         let mut file_name = String::new();
         file_name.push_str(&file.to_string());
         file_name.push('.');
-        file_name.push_str(extension_array[rand::random::<usize>() % 11]);
+        let mut rng = rand::thread_rng();
+        let random_extension = EXTENSIONS[rng.gen_range(0..EXTENSIONS.len())].0;
+        file_name.push_str(random_extension);
         let mut file = fs::File::create(file_name).expect("Failed to create file");
         file.write_all(b"Hello, world!")
             .expect("Failed to write to file");

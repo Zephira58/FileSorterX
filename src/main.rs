@@ -2,8 +2,8 @@
 #![allow(unused_must_use)]
 
 use clap::{Parser, Subcommand};
-use FileSorterX::{create_files, custom_sort, sort_files, update_filesorterx};
 use std::{path::PathBuf, time::SystemTime};
+use FileSorterX::{create_files, custom_sort, sort_files, update_filesorterx};
 
 /*
 Made by Xanthus
