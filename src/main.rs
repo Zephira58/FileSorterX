@@ -22,6 +22,7 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
+    /// Sorts files based on file extension matching our database
     Sort {
         /// The input directory
         #[arg(short, long)]
@@ -47,11 +48,13 @@ enum Commands {
         #[arg(short, long, default_value_t = false)]
         log: bool,
     },
+    /// Creates a specified amount of files
     Create {
         /// The amount of files to create
         #[arg(short, long)]
         amount: u32,
     },
+    /// Sorts files based on custom file extensions
     Customsort {
         /// The input directory
         #[arg(short, long)]
@@ -73,7 +76,10 @@ enum Commands {
         #[arg(short, long, default_value_t = false)]
         log: bool,
     },
+    /// Updates FileSorterX to the latest version based on the github repo
     Update {},
+    /// Benchmarks the time it takes to create 10k files and sort them
+    Benchmark {},
 }
 
 fn main() {
@@ -118,6 +124,17 @@ fn main() {
         }
         Some(Commands::Update { .. }) => {
             update_filesorterx().expect("Failed to update FileSorterX");
+        }
+        Some(Commands::Benchmark { .. }) => {
+            let startbench = SystemTime::now();
+            create_files(10001);
+            sort_files(".".into(), "./benchmark".into(), 3, false, false, false);
+            let endbench = SystemTime::now();
+            println!(
+                "Time taken: {:?}",
+                endbench.duration_since(startbench).unwrap()
+            );
+            std::fs::remove_dir_all("./benchmark");
         }
         None => println!("No command provided. Use 'filesorterx --help' for more information."),
     }
