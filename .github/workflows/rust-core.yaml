@@ -82,3 +82,14 @@ jobs:
       - uses: mbrobbel/rustfmt-check@master
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          
+# Runs cargo update to update the cargo.lock file
+  update:
+    name: Run Cargo update
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+        run: cargo update
