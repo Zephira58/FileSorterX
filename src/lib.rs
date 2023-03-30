@@ -11,6 +11,7 @@ use std::{
     fs,
     io::Write,
     path::{Path, PathBuf},
+    time::{Duration, SystemTime},
 };
 
 pub fn create_files(amount: u32) {
@@ -206,4 +207,13 @@ pub fn update_filesorterx() -> Result<(), Box<dyn (std::error::Error)>> {
         .update()?;
     println!("Update status: `{}`!", status.version());
     Ok(())
+}
+
+pub fn benchmark() -> Duration {
+    let startbench = SystemTime::now();
+    create_files(10001);
+    sort_files(".".into(), "./benchmark".into(), 3, false, false, false)
+        .expect("Failed to sort files");
+    let endbench = SystemTime::now();
+    return endbench.duration_since(startbench).unwrap();
 }

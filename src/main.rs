@@ -3,13 +3,13 @@
 
 use clap::{Parser, Subcommand};
 use std::{path::PathBuf, time::SystemTime};
-use FileSorterX::{create_files, custom_sort, sort_files, update_filesorterx};
+use FileSorterX::{benchmark, create_files, custom_sort, sort_files, update_filesorterx};
 
 /*
 Made by Xanthus
 Check out my other works at https://github.com/Xanthus58
-Email me at 'Xanthus58@protonmail.com'
-You can see more information on my website https://xanthus58.github.io/Xanthus58/
+Email me at 'business@xanthus.uk'
+You can see more information on my website https://xanthus.uk
 */
 
 #[derive(Parser)]
@@ -126,14 +126,7 @@ fn main() {
             update_filesorterx().expect("Failed to update FileSorterX");
         }
         Some(Commands::Benchmark { .. }) => {
-            let startbench = SystemTime::now();
-            create_files(10001);
-            sort_files(".".into(), "./benchmark".into(), 3, false, false, false);
-            let endbench = SystemTime::now();
-            println!(
-                "Time taken: {:?}",
-                endbench.duration_since(startbench).unwrap()
-            );
+            println!("Time Taken: {:?}", benchmark());
         }
         None => println!("No command provided. Use 'filesorterx --help' for more information."),
     }
