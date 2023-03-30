@@ -64,6 +64,14 @@ enum Commands {
         /// The file extension to sort
         #[arg(short, long)]
         extension: String,
+
+        /// Verbose mode
+        #[arg(short, long, default_value_t = false)]
+        verbose: bool,
+
+        /// Generates a log file
+        #[arg(short, long, default_value_t = false)]
+        log: bool,
     },
     Update {},
 }
@@ -97,8 +105,10 @@ fn main() {
             inputdir,
             outputdir,
             extension,
+            verbose,
+            log,
         }) => {
-            custom_sort(inputdir, outputdir, extension);
+            custom_sort(inputdir, outputdir, extension, *verbose, *log);
         }
         Some(Commands::Create { amount }) => {
             create_files(amount + 1);

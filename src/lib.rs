@@ -27,7 +27,13 @@ pub fn create_files(amount: u32) {
     }
 }
 
-pub fn custom_sort(input_directory: &str, output_directory: &str, extension: &str) {
+pub fn custom_sort(
+    input_directory: &str,
+    output_directory: &str,
+    extension: &str,
+    verbose: bool,
+    log: bool,
+) {
     // Set up the directories
     let input_directory = Path::new(input_directory);
     let output_directory = Path::new(output_directory);
@@ -47,9 +53,21 @@ pub fn custom_sort(input_directory: &str, output_directory: &str, extension: &st
             Some(ext) if ext == extension => {
                 fs::create_dir_all(output_directory).unwrap();
                 let output_file = output_directory.join(file.file_name().unwrap());
-                fs::rename(file, output_file).unwrap();
+                fs::rename(file.clone(), output_file).unwrap();
             }
             _ => continue,
+        }
+
+        if verbose {
+            println!("Moved file: {:?} to {:?}", file, output_directory);
+        }
+
+        if log {
+            write_logfile(
+                &file.as_os_str(),
+                output_directory,
+                input_directory.to_str().unwrap(),
+            );
         }
     }
 }
@@ -114,11 +132,13 @@ pub fn get_subdir_by_extension(ext: &str, nesting_level: u8, use_alt: bool) -> P
     path
 }
 
-pub fn write_logfile(file_name: &OsStr, moveto_directory: &Path) -> bool {
+pub fn write_logfile(file_name: &OsStr, moveto_directory: &Path, input_directory: &str) -> bool {
+    let logdir = Path::new(input_directory).join("sorter-logs/");
+    fs::create_dir_all(logdir.clone()).unwrap();
     let mut logfile = fs::OpenOptions::new()
         .append(true)
         .create(true)
-        .open("sorter-logs/logs.txt")
+        .open(logdir.to_str().unwrap().to_owned() + "sorter.log")
         .expect("create failed");
 
     logfile
@@ -142,7 +162,7 @@ pub fn sort_files(
     verbose: bool,
     log: bool,
 ) -> std::io::Result<()> {
-    for entry in fs::read_dir(in_dir)? {
+    for entry in fs::read_dir(in_dir.clone())? {
         let path = entry?.path();
         let file_name = match path.file_name() {
             None => continue,
@@ -168,7 +188,7 @@ pub fn sort_files(
         if log {
             let log_dir = "sorter-logs";
             fs::create_dir_all(log_dir).unwrap();
-            write_logfile(file_name, &moveto_directory);
+            write_logfile(file_name, &moveto_directory, in_dir.to_str().unwrap());
         }
     }
 
