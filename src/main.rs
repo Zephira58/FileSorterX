@@ -78,7 +78,7 @@ enum Commands {
     },
     /// Updates FileSorterX to the latest version based on the github repo
     Update {},
-    /// Benchmarks the time it takes to create 10k files and sort them in the current directory
+    /// Note: Only run in a new empty directory. Runs a benchmark test
     Benchmark {},
 }
 
