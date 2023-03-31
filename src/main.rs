@@ -2,16 +2,14 @@
 #![allow(unused_must_use)]
 
 use clap::{Parser, Subcommand};
-use std::time::SystemTime;
-use FileSorterX::{create_files, custom_sort, sort_files, update_filesorterx};
-
-mod tests;
+use std::{path::PathBuf, time::SystemTime};
+use FileSorterX::{benchmark, create_files, custom_sort, sort_files, update_filesorterx};
 
 /*
 Made by Xanthus
 Check out my other works at https://github.com/Xanthus58
-Email me at 'Xanthus58@protonmail.com'
-You can see more information on my website https://xanthus58.github.io/Xanthus58/
+Email me at 'business@xanthus.uk'
+You can see more information on my website https://xanthus.uk
 */
 
 #[derive(Parser)]
@@ -24,7 +22,24 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
+    /// Sorts files based on file extension matching our database
     Sort {
+        /// The input directory
+        #[arg(short, long)]
+        inputdir: String,
+
+        /// The output directory
+        #[arg(short, long)]
+        outputdir: String,
+
+        /// Number of directory levels (1-3)
+        #[arg(short, long, default_value_t = 2)]
+        nesting_level: u8,
+
+        /// Use alternative sorting directory name
+        #[arg(short, long, default_value_t = false)]
+        use_alt: bool,
+
         /// Verbose mode
         #[arg(short, long, default_value_t = false)]
         verbose: bool,
@@ -33,25 +48,38 @@ enum Commands {
         #[arg(short, long, default_value_t = false)]
         log: bool,
     },
+    /// Creates a specified amount of files
     Create {
         /// The amount of files to create
         #[arg(short, long)]
         amount: u32,
     },
+    /// Sorts files based on custom file extensions
     Customsort {
         /// The input directory
         #[arg(short, long)]
-        input: String,
+        inputdir: String,
 
         /// The output directory
         #[arg(short, long)]
-        output: String,
+        outputdir: String,
 
         /// The file extension to sort
         #[arg(short, long)]
         extension: String,
+
+        /// Verbose mode
+        #[arg(short, long, default_value_t = false)]
+        verbose: bool,
+
+        /// Generates a log file
+        #[arg(short, long, default_value_t = false)]
+        log: bool,
     },
+    /// Updates FileSorterX to the latest version based on the github repo
     Update {},
+    /// Note: Only run in a new empty directory. Runs a benchmark test
+    Benchmark {},
 }
 
 fn main() {
@@ -59,18 +87,34 @@ fn main() {
     let cli = Cli::parse();
 
     match &cli.command {
-        Some(Commands::Sort { verbose, log }) => {
-            sort_files(verbose, log);
+        Some(Commands::Sort {
+            inputdir,
+            outputdir,
+            nesting_level,
+            use_alt,
+            verbose,
+            log,
+        }) => {
+            let in_dir = PathBuf::from(inputdir);
+            let out_dir = PathBuf::from(outputdir);
+
+            if !in_dir.is_dir() {
+                panic!("Provided path is not a directory: '{:?}'", in_dir)
+            }
+
+            sort_files(in_dir, out_dir, *nesting_level, *use_alt, *verbose, *log);
             let end = SystemTime::now();
             let duration = end.duration_since(start).unwrap();
             println!("Time taken: {:?}", duration);
         }
         Some(Commands::Customsort {
-            input,
-            output,
+            inputdir,
+            outputdir,
             extension,
+            verbose,
+            log,
         }) => {
-            custom_sort(input, output, extension);
+            custom_sort(inputdir, outputdir, extension, *verbose, *log);
         }
         Some(Commands::Create { amount }) => {
             create_files(amount + 1);
@@ -81,6 +125,9 @@ fn main() {
         Some(Commands::Update { .. }) => {
             update_filesorterx().expect("Failed to update FileSorterX");
         }
-        None => todo!(),
+        Some(Commands::Benchmark { .. }) => {
+            println!("Time Taken: {:?}", benchmark());
+        }
+        None => println!("No command provided. Use 'filesorterx --help' for more information."),
     }
 }

@@ -1,48 +1,41 @@
-#[cfg(test)]
-mod tests {
+use crate::get_subdir_by_extension;
+use std::path::PathBuf;
 
-    use std::{
-        fs::File,
-        path::{Path, PathBuf},
-    };
-    use FileSorterX::*;
+#[test]
+#[rustfmt::skip]
+fn test_match_extension() {
+    assert_eq!(get_subdir_by_extension("jpg", 1, false), PathBuf::from("image"));
+    assert_eq!(get_subdir_by_extension("jpg", 2, false), PathBuf::from("image/jpg"));
 
-    #[test]
-    fn test_create_files() {
-        let dir_path = "test_dir";
-        let file_names = vec!["test_file1.txt", "test_file2.txt"];
+    assert_eq!(get_subdir_by_extension("gif", 1, true), PathBuf::from("image"));
+    assert_eq!(get_subdir_by_extension("gif", 2, true), PathBuf::from("image/animated"));
+    assert_eq!(get_subdir_by_extension("gif", 3, true), PathBuf::from("image/animated/gif"));
 
-        // Create the directory if it does not exist
-        std::fs::create_dir_all(dir_path).unwrap();
+    assert_eq!(get_subdir_by_extension("qt", 1, false), PathBuf::from("video"));
+    assert_eq!(get_subdir_by_extension("qt", 2, false), PathBuf::from("video/quicktime"));
+    assert_eq!(get_subdir_by_extension("qt", 3, false), PathBuf::from("video/quicktime"));
 
-        for file_name in file_names {
-            let file_path = format!("{}/{}", dir_path, file_name);
-            File::create(&file_path).unwrap();
-            assert!(Path::new(&file_path).exists());
-        }
+    assert_eq!(get_subdir_by_extension("qt", 1, true), PathBuf::from("video"));
+    assert_eq!(get_subdir_by_extension("qt", 2, true), PathBuf::from("video/quicktime"));
+    assert_eq!(get_subdir_by_extension("qt", 3, true), PathBuf::from("video/quicktime"));
 
-        // Clean up
-        std::fs::remove_dir_all(dir_path).unwrap();
-    }
+    assert_eq!(get_subdir_by_extension("mp4", 1, false), PathBuf::from("video"));
+    assert_eq!(get_subdir_by_extension("mp4", 2, false), PathBuf::from("video/mp4"));
+    assert_eq!(get_subdir_by_extension("mp4", 3, false), PathBuf::from("video/mp4"));
 
-    #[test]
-    fn test_match_extension() {
-        let file_path = PathBuf::from("example.jpg");
-        assert_eq!(match_extension(file_path), "sorted/pictures");
+    assert_eq!(get_subdir_by_extension("mp4", 1, true), PathBuf::from("video"));
+    assert_eq!(get_subdir_by_extension("mp4", 2, true), PathBuf::from("video/mp4"));
+    assert_eq!(get_subdir_by_extension("mp4", 3, true), PathBuf::from("video/mp4"));
+}
 
-        let file_path = PathBuf::from("example.mp4");
-        assert_eq!(match_extension(file_path), "sorted/videos");
+#[test]
+#[should_panic(expected = "Nesting level is out of range.")]
+fn test_match_extension_panic_less() {
+    get_subdir_by_extension("s", 0, false);
+}
 
-        let file_path = PathBuf::from("example.wma");
-        assert_eq!(match_extension(file_path), "sorted/audio");
-
-        let file_path = PathBuf::from("example.gif");
-        assert_eq!(match_extension(file_path), "sorted/gifs");
-
-        let file_path = PathBuf::from("example.zip");
-        assert_eq!(match_extension(file_path), "sorted/files");
-
-        let file_path = PathBuf::from("example.txt");
-        assert_eq!(match_extension(file_path), "sorted/documents");
-    }
+#[test]
+#[should_panic(expected = "Nesting level is out of range.")]
+fn test_match_extension_panic_more() {
+    get_subdir_by_extension("s", 4, false);
 }
