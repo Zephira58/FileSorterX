@@ -1,6 +1,6 @@
 [package]
 name = "FileSorterX"
-version = "1.1.0"
+version = "1.2.0"
 edition = "2021"
 authors = ["Xanthus58 <Xanthus58@protonmail.com>"]
 description = "FileSorterX is an automatic file sorting application that sorts your files into folders based on their file extension. With FileSorterX, you can easily keep your files organized and find what you need quickly."
