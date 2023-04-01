@@ -40,6 +40,13 @@ FileSorterX is a powerful command-line interface (CLI) tool designed to help use
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://xanthus.uk/"><img src="https://avatars.githubusercontent.com/u/66909997?v=4?s=100" width="100px;" alt="Xanthus"/><br /><sub><b>Xanthus</b></sub></a><br /><a href="#ideas-Xanthus58" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/Xanthus58/FileSorterX/commits?author=Xanthus58" title="Code">💻</a> <a href="#design-Xanthus58" title="Design">🎨</a> <a href="#maintenance-Xanthus58" title="Maintenance">🚧</a></td>
+    </tr>
+  </tbody>
+</table>
 
 <!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->
