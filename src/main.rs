@@ -2,13 +2,11 @@
 #![allow(unused_must_use)]
 
 use clap::{Parser, Subcommand};
-use core::time;
 use dotenv::dotenv;
 use std::{
     env,
     path::PathBuf,
     process::Command,
-    ptr::null,
     time::{Duration, SystemTime},
 };
 use uuid::*;
@@ -233,7 +231,7 @@ fn collect_telemetry(
     verbose: &str,
     log: &str,
     extension: String,
-    mut amount: &str,
+    amount: &str,
     cmd: &str,
     time: Duration,
 ) {
@@ -269,29 +267,13 @@ fn collect_telemetry(
     command.push_str(&time.as_secs_f64().to_string());
     command.push_str("'");
 
-    let mut testtoken = "curl -UserAgent 'Test'".to_string();
-    testtoken.push_str(&token);
-    if os == "windows" {
-        Command::new("curl")
-            .arg("-A")
-            .arg(command)
-            .arg(&token)
-            .output()
-            .expect("Failed to execute command");
+    Command::new("curl")
+        .arg("-A")
+        .arg(command)
+        .arg(&token)
+        .output()
+        .expect("Failed to execute command");
 
-        println!("Telemetry ID: {}", id);
-        println!("Pleaes use this ID when reporting any issues.");
-    } else if os == "linux" {
-        Command::new("curl")
-            .arg("-UserAgent")
-            .arg(command)
-            .arg(&token)
-            .output()
-            .expect("Failed to execute command");
-
-        println!("Telemetry ID: {}", id);
-        println!("Pleaes use this ID when reporting any issues.");
-    } else {
-        println!("Your OS doesn't support telemetry collection.");
-    }
+    println!("Telemetry ID: {}", id);
+    println!("Pleaes use this ID when reporting any issues.");
 }
