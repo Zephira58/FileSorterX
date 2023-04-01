@@ -4,7 +4,7 @@
 use clap::{Parser, Subcommand};
 use dotenv::dotenv;
 use std::{env, path::PathBuf, process::Command, time::SystemTime};
-use uuid::Uuid;
+use uuid::*;
 use FileSorterX::*;
 
 /*
@@ -90,10 +90,6 @@ enum Commands {
 
 fn main() {
     let cli = Cli::parse();
-    if !cli.disable_telemetry {
-        dotenv().ok();
-        collect_telemetry();
-    }
 
     let start = SystemTime::now();
     match &cli.command {
@@ -116,6 +112,21 @@ fn main() {
             let end = SystemTime::now();
             let duration = end.duration_since(start).unwrap();
             println!("Time taken: {:?}", duration);
+
+            if !cli.disable_telemetry {
+                dotenv().ok();
+                collect_telemetry(
+                    inputdir.to_string(),
+                    outputdir.to_string(),
+                    &*nesting_level.to_string(),
+                    &*use_alt.to_string(),
+                    &*verbose.to_string(),
+                    &*log.to_string(),
+                    "N/A".to_string(),
+                    0,
+                    "Sort Files",
+                );
+            }
         }
         Some(Commands::Customsort {
             inputdir,
@@ -125,38 +136,142 @@ fn main() {
             log,
         }) => {
             custom_sort(inputdir, outputdir, extension, *verbose, *log);
+            if !cli.disable_telemetry {
+                dotenv().ok();
+                collect_telemetry(
+                    inputdir.to_string(),
+                    outputdir.to_string(),
+                    "N/A",
+                    "N/A",
+                    &*verbose.to_string(),
+                    &*log.to_string(),
+                    extension.to_string(),
+                    0,
+                    "Custom Sort",
+                );
+            }
         }
         Some(Commands::Create { amount }) => {
             create_files(amount + 1);
             let end = SystemTime::now();
             let duration = end.duration_since(start).unwrap();
             println!("Time taken: {:?}", duration);
+
+            if !cli.disable_telemetry {
+                dotenv().ok();
+                collect_telemetry(
+                    "N/A".to_string(),
+                    "N/A".to_string(),
+                    "N/A",
+                    "N/A",
+                    "N/A",
+                    "N/A",
+                    "N/A".to_string(),
+                    0,
+                    "Create Files",
+                );
+            }
         }
         Some(Commands::Update { .. }) => {
             update_filesorterx().expect("Failed to update FileSorterX");
+            if !cli.disable_telemetry {
+                dotenv().ok();
+                collect_telemetry(
+                    "N/A".to_string(),
+                    "N/A".to_string(),
+                    "N/A",
+                    "N/A",
+                    "N/A",
+                    "N/A",
+                    "N/A".to_string(),
+                    0,
+                    "Update",
+                );
+            }
         }
         Some(Commands::Benchmark { .. }) => {
             println!("Time Taken: {:?}", benchmark());
+            if !cli.disable_telemetry {
+                dotenv().ok();
+                collect_telemetry(
+                    "N/A".to_string(),
+                    "N/A".to_string(),
+                    "N/A",
+                    "N/A",
+                    "N/A",
+                    "N/A",
+                    "N/A".to_string(),
+                    0,
+                    "Benchmark",
+                );
+            }
         }
         None => println!("No command provided. Use 'filesorterx --help' for more information."),
     }
 }
 
-fn collect_telemetry() {
+fn collect_telemetry(
+    inputdir: String,
+    outputdir: String,
+    nesting_level: &str,
+    use_alt: &str,
+    verbose: &str,
+    log: &str,
+    extension: String,
+    mut amount: u32,
+    cmd: &str,
+) {
+    let id = Uuid::new_v4();
+    amount += 1;
+
     let os = env::consts::OS;
     let token = std::env::var("TELEMETRY_TOKEN").expect("TELEMETRY_TOKEN not set");
     let mut command = String::new();
 
+    command.push_str("'UUID: ");
+    command.push_str(&id.to_string());
+    command.push_str(" | OS: ");
+    command.push_str(&os);
+    command.push_str(" | Command: ");
+    command.push_str(&cmd);
+    command.push_str(" | Inputdir: ");
+    command.push_str(&inputdir);
+    command.push_str(" | OutputDir: ");
+    command.push_str(&outputdir);
+    command.push_str(" | Nesting Level: ");
+    command.push_str(&nesting_level);
+    command.push_str(" | Use Alt: ");
+    command.push_str(&use_alt);
+    command.push_str(" | Verbose: ");
+    command.push_str(&verbose);
+    command.push_str(" | Logging: ");
+    command.push_str(&log);
+    command.push_str(" | Extension: ");
+    command.push_str(&extension);
+    command.push_str(" | Amount: ");
+    command.push_str(&amount.to_string());
+    command.push_str("'");
+
+    let mut testtoken = "curl -UserAgent 'Test'".to_string();
+    testtoken.push_str(&token);
     if os == "windows" {
-        command = "curl -UserAgent".to_string();
+        Command::new("curl")
+            .arg("-A")
+            .arg(command)
+            .arg(&token)
+            .output()
+            .expect("Failed to execute command");
     } else if os == "linux" {
-        command = "curl -A".to_string();
+        Command::new("curl")
+            .arg("-UserAgent")
+            .arg(command)
+            .arg(&token)
+            .output()
+            .expect("Failed to execute command");
+    } else {
+        println!("Your OS doesn't support telemetry collection.");
     }
 
-    command.push_str(&token);
-    println!("{}", command);
-    Command::new("curl")
-        .arg(token)
-        .output()
-        .expect("Failed to execute command");
+    println!("Telemetry ID: {}", id);
+    println!("Pleaes use this ID when reporting any issues.");
 }
