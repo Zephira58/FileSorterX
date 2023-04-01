@@ -261,6 +261,9 @@ fn collect_telemetry(
             .arg(&token)
             .output()
             .expect("Failed to execute command");
+
+        println!("Telemetry ID: {}", id);
+        println!("Pleaes use this ID when reporting any issues.");
     } else if os == "linux" {
         Command::new("curl")
             .arg("-UserAgent")
@@ -268,10 +271,10 @@ fn collect_telemetry(
             .arg(&token)
             .output()
             .expect("Failed to execute command");
+
+        println!("Telemetry ID: {}", id);
+        println!("Pleaes use this ID when reporting any issues.");
     } else {
         println!("Your OS doesn't support telemetry collection.");
     }
-
-    println!("Telemetry ID: {}", id);
-    println!("Pleaes use this ID when reporting any issues.");
 }
