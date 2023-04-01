@@ -25,6 +25,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "WolfenXVII",
+      "name": "Wolfen",
+      "avatar_url": "https://avatars.githubusercontent.com/u/91616065?v=4",
+      "profile": "https://github.com/WolfenXVII",
+      "contributions": [
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
