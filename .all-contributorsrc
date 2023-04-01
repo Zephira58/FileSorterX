@@ -16,6 +16,15 @@
         "design",
         "maintenance"
       ]
+    },
+    {
+      "login": "FlameOrchid",
+      "name": "FlameOrchid",
+      "avatar_url": "https://avatars.githubusercontent.com/u/57208295?v=4",
+      "profile": "https://github.com/FlameOrchid",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
