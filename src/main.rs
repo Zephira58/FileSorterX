@@ -2,8 +2,10 @@
 #![allow(unused_must_use)]
 
 use clap::{Parser, Subcommand};
-use std::{path::PathBuf, time::SystemTime};
-use FileSorterX::{benchmark, create_files, custom_sort, sort_files, update_filesorterx};
+use dotenv::dotenv;
+use std::{env, path::PathBuf, process::Command, time::SystemTime};
+use uuid::Uuid;
+use FileSorterX::*;
 
 /*
 Made by Xanthus
@@ -18,6 +20,10 @@ struct Cli {
     /// Sorts the files in the current directory
     #[command(subcommand)]
     command: Option<Commands>,
+
+    /// Disables telemetry
+    #[arg(short, long, default_value_t = false)]
+    disable_telemetry: bool,
 }
 
 #[derive(Subcommand)]
@@ -83,9 +89,13 @@ enum Commands {
 }
 
 fn main() {
-    let start = SystemTime::now();
     let cli = Cli::parse();
+    if !cli.disable_telemetry {
+        dotenv().ok();
+        collect_telemetry();
+    }
 
+    let start = SystemTime::now();
     match &cli.command {
         Some(Commands::Sort {
             inputdir,
@@ -130,4 +140,23 @@ fn main() {
         }
         None => println!("No command provided. Use 'filesorterx --help' for more information."),
     }
+}
+
+fn collect_telemetry() {
+    let os = env::consts::OS;
+    let token = std::env::var("TELEMETRY_TOKEN").expect("TELEMETRY_TOKEN not set");
+    let mut command = String::new();
+
+    if os == "windows" {
+        command = "curl -UserAgent".to_string();
+    } else if os == "linux" {
+        command = "curl -A".to_string();
+    }
+
+    command.push_str(&token);
+    println!("{}", command);
+    Command::new("curl")
+        .arg(token)
+        .output()
+        .expect("Failed to execute command");
 }
