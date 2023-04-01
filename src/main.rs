@@ -2,8 +2,15 @@
 #![allow(unused_must_use)]
 
 use clap::{Parser, Subcommand};
+use core::time;
 use dotenv::dotenv;
-use std::{env, path::PathBuf, process::Command, time::SystemTime};
+use std::{
+    env,
+    path::PathBuf,
+    process::Command,
+    ptr::null,
+    time::{Duration, SystemTime},
+};
 use uuid::*;
 use FileSorterX::*;
 
@@ -123,8 +130,9 @@ fn main() {
                     &*verbose.to_string(),
                     &*log.to_string(),
                     "N/A".to_string(),
-                    0,
+                    "N/A",
                     "Sort Files",
+                    duration,
                 );
             }
         }
@@ -135,6 +143,8 @@ fn main() {
             verbose,
             log,
         }) => {
+            let end = SystemTime::now();
+            let duration = end.duration_since(start).unwrap();
             custom_sort(inputdir, outputdir, extension, *verbose, *log);
             if !cli.disable_telemetry {
                 dotenv().ok();
@@ -146,8 +156,9 @@ fn main() {
                     &*verbose.to_string(),
                     &*log.to_string(),
                     extension.to_string(),
-                    0,
+                    "N/A",
                     "Custom Sort",
+                    duration,
                 );
             }
         }
@@ -167,8 +178,9 @@ fn main() {
                     "N/A",
                     "N/A",
                     "N/A".to_string(),
-                    0,
+                    amount.to_string().as_str(),
                     "Create Files",
+                    duration,
                 );
             }
         }
@@ -184,13 +196,15 @@ fn main() {
                     "N/A",
                     "N/A",
                     "N/A".to_string(),
-                    0,
+                    "N/A",
                     "Update",
+                    Duration::from_secs(0),
                 );
             }
         }
         Some(Commands::Benchmark { .. }) => {
-            println!("Time Taken: {:?}", benchmark());
+            let time = benchmark();
+            println!("Time Taken: {:?}", time);
             if !cli.disable_telemetry {
                 dotenv().ok();
                 collect_telemetry(
@@ -201,8 +215,9 @@ fn main() {
                     "N/A",
                     "N/A",
                     "N/A".to_string(),
-                    0,
+                    "N/A",
                     "Benchmark",
+                    time,
                 );
             }
         }
@@ -218,11 +233,11 @@ fn collect_telemetry(
     verbose: &str,
     log: &str,
     extension: String,
-    mut amount: u32,
+    mut amount: &str,
     cmd: &str,
+    time: Duration,
 ) {
     let id = Uuid::new_v4();
-    amount += 1;
 
     let os = env::consts::OS;
     let token = std::env::var("TELEMETRY_TOKEN").expect("TELEMETRY_TOKEN not set");
@@ -250,6 +265,8 @@ fn collect_telemetry(
     command.push_str(&extension);
     command.push_str(" | Amount: ");
     command.push_str(&amount.to_string());
+    command.push_str(" | Time Taken: ");
+    command.push_str(&time.as_secs_f64().to_string());
     command.push_str("'");
 
     let mut testtoken = "curl -UserAgent 'Test'".to_string();
