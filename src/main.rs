@@ -123,10 +123,10 @@ fn main() {
                 collect_telemetry(
                     inputdir.to_string(),
                     outputdir.to_string(),
-                    &*nesting_level.to_string(),
-                    &*use_alt.to_string(),
-                    &*verbose.to_string(),
-                    &*log.to_string(),
+                    &nesting_level.to_string(),
+                    &use_alt.to_string(),
+                    &verbose.to_string(),
+                    &log.to_string(),
                     "N/A".to_string(),
                     "N/A",
                     "Sort Files",
@@ -151,8 +151,8 @@ fn main() {
                     outputdir.to_string(),
                     "N/A",
                     "N/A",
-                    &*verbose.to_string(),
-                    &*log.to_string(),
+                    &verbose.to_string(),
+                    &log.to_string(),
                     extension.to_string(),
                     "N/A",
                     "Custom Sort",
@@ -244,28 +244,28 @@ fn collect_telemetry(
     command.push_str("'UUID: ");
     command.push_str(&id.to_string());
     command.push_str(" | OS: ");
-    command.push_str(&os);
+    command.push_str(os);
     command.push_str(" | Command: ");
-    command.push_str(&cmd);
+    command.push_str(cmd);
     command.push_str(" | Inputdir: ");
     command.push_str(&inputdir);
     command.push_str(" | OutputDir: ");
     command.push_str(&outputdir);
     command.push_str(" | Nesting Level: ");
-    command.push_str(&nesting_level);
+    command.push_str(nesting_level);
     command.push_str(" | Use Alt: ");
-    command.push_str(&use_alt);
+    command.push_str(use_alt);
     command.push_str(" | Verbose: ");
-    command.push_str(&verbose);
+    command.push_str(verbose);
     command.push_str(" | Logging: ");
-    command.push_str(&log);
+    command.push_str(log);
     command.push_str(" | Extension: ");
     command.push_str(&extension);
     command.push_str(" | Amount: ");
-    command.push_str(&amount.to_string());
+    command.push_str(amount);
     command.push_str(" | Time Taken: ");
     command.push_str(&time.as_secs_f64().to_string());
-    command.push_str("'");
+    command.push('\'');
 
     Command::new("curl")
         .arg("-A")
