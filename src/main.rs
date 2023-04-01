@@ -2,7 +2,7 @@
 #![allow(unused_must_use)]
 
 use clap::{Parser, Subcommand};
-use dotenv::dotenv;
+use dotenv_codegen::dotenv;
 use std::{
     env,
     path::PathBuf,
@@ -119,7 +119,6 @@ fn main() {
             println!("Time taken: {:?}", duration);
 
             if !cli.disable_telemetry {
-                dotenv().ok();
                 collect_telemetry(
                     inputdir.to_string(),
                     outputdir.to_string(),
@@ -145,7 +144,6 @@ fn main() {
             let duration = end.duration_since(start).unwrap();
             custom_sort(inputdir, outputdir, extension, *verbose, *log);
             if !cli.disable_telemetry {
-                dotenv().ok();
                 collect_telemetry(
                     inputdir.to_string(),
                     outputdir.to_string(),
@@ -167,7 +165,6 @@ fn main() {
             println!("Time taken: {:?}", duration);
 
             if !cli.disable_telemetry {
-                dotenv().ok();
                 collect_telemetry(
                     "N/A".to_string(),
                     "N/A".to_string(),
@@ -184,8 +181,8 @@ fn main() {
         }
         Some(Commands::Update { .. }) => {
             update_filesorterx().expect("Failed to update FileSorterX");
+
             if !cli.disable_telemetry {
-                dotenv().ok();
                 collect_telemetry(
                     "N/A".to_string(),
                     "N/A".to_string(),
@@ -204,7 +201,6 @@ fn main() {
             let time = benchmark();
             println!("Time Taken: {:?}", time);
             if !cli.disable_telemetry {
-                dotenv().ok();
                 collect_telemetry(
                     "N/A".to_string(),
                     "N/A".to_string(),
@@ -236,9 +232,8 @@ fn collect_telemetry(
     time: Duration,
 ) {
     let id = Uuid::new_v4();
-
     let os = env::consts::OS;
-    let token = std::env::var("TELEMETRY_TOKEN").expect("TELEMETRY_TOKEN not set");
+    let token = dotenv!("TELEMETRY_TOKEN");
     let mut command = String::new();
 
     command.push_str("'UUID: ");
@@ -265,12 +260,15 @@ fn collect_telemetry(
     command.push_str(amount);
     command.push_str(" | Time Taken: ");
     command.push_str(&time.as_secs_f64().to_string());
+    command.push_str(" | FileSorterX Version: ");
+    command.push_str(env!("CARGO_PKG_VERSION"));
     command.push('\'');
 
     Command::new("curl")
         .arg("-A")
         .arg(command)
-        .arg(&token)
+        .arg(token)
+        .arg("-k")
         .output()
         .expect("Failed to execute command");
 
