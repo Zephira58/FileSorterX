@@ -1,0 +1,28 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "commitConvention": "angular",
+  "contributors": [
+    {
+      "login": "Xanthus58",
+      "name": "Xanthus",
+      "avatar_url": "https://avatars.githubusercontent.com/u/66909997?v=4",
+      "profile": "https://xanthus.uk/",
+      "contributions": [
+        "ideas",
+        "code",
+        "design",
+        "maintenance"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "skipCi": true,
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "projectName": "FileSorterX",
+  "projectOwner": "Xanthus58"
+}
