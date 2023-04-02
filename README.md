@@ -10,7 +10,7 @@
 ### Sort files in a flash with lightning-fast automation.
 ![Logo](media/filesorterx-logo.png)
 
-## 📦 [Installation Guide](https://github.com/Ciphey/Ciphey/wiki/Installation)
+## 📦 [Installation Guide](https://github.com/Xanthus58/FileSorterX/wiki/Installing-FileSorterX)
 | 📦 Cargo                                   | 💾  Binary                                                         |
 |-------------------------------------------|-------------------------------------------------------------------|
 | ![Cargo](media/cargo.png) | <img src="https://i.imgur.com/Y58skH4.png" width="250" />                        |
