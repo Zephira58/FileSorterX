@@ -2,7 +2,7 @@
  <br><br>
 ➡️
 <a href="https://discord.gg/jW5mBqYFh9">Discord</a> | 
-<a href="https://github.com/Xanthus58/FileSorterX/wiki/FileSorterX-Telemetry">Documentation </a>
+<a href="https://github.com/Xanthus58/FileSorterX/wiki">Documentation </a>
  ⬅️
 </p>
 
