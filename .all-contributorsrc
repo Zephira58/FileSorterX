@@ -35,6 +35,15 @@
       "contributions": [
         "test"
       ]
+    },
+    {
+      "login": "okalm",
+      "name": "okalm",
+      "avatar_url": "https://avatars.githubusercontent.com/u/40634668?v=4",
+      "profile": "https://github.com/okalm",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
