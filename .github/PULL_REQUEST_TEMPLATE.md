@@ -1,3 +1,11 @@
+--
+name: Pull Request 
+about: Create a PR and assist the development team
+title: "<Tags:> <Info>"
+assignees: Xanthus58
+
+---
+
 * **Please check if the PR fulfills these requirements**
 - [ ] The commit message follows our guidelines and licences
 
